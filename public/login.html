@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Estilos específicos para la página de login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--background-color);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--card-background);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .login-header {
+            margin-bottom: 20px;
+        }
+
+        .login-header h2 {
+            color: var(--text-color);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dcdde1;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #6a5acd;
+            outline: none;
+        }
+
+        .login-button {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(106, 90, 205, 0.2);
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(106, 90, 205, 0.3);
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        .forgot-password {
+            margin-top: 15px;
+            color: var(--primary-color);
+            font-size: 0.9em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Por favor, introduce tus credenciales</p>
+            </div>
+            <form>
+                <div class="input-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="********" required>
+                </div>
+                <button type="submit" class="login-button">Acceder</button>
+            </form>
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+    </div>
+</body>
+</html>
