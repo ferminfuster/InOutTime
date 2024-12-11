@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Espectacular</title>
+    <title>Login InOutTime</title>
     <link rel="stylesheet" href="css/login.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="js/login.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -13,10 +15,11 @@
                 <img src="images/logo.png" alt="Logo de la empresa">
             </div>
             <div class="login-header">
-                <h2>Bienvenido de Nuevo</h2>
+                <h2>Bienvenido a InOutTime</h2>
+                <h4>Más que un fichaje, una solución</h4>
                 <p>Accede a tu cuenta para continuar</p>
             </div>
-            <form>
+            <form id="login-form">
                 <div class="input-group">
                     <input type="email" id="email" placeholder="Correo Electrónico" required>
                 </div>
@@ -25,6 +28,7 @@
                 </div>
                 <button type="submit" class="login-button">Entrar</button>
             </form>
+            <p id="error-message" style="color: red; display: none;"></p>
             <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
         </div>
     </div>
