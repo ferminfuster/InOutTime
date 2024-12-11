@@ -34,7 +34,7 @@ body {
     }
 }
 
-.login-container {
+.registro-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,7 +42,7 @@ body {
     padding: 20px;
 }
 
-.login-card {
+.registro-card {
     background: var(--card-background);
     padding: 40px;
     border-radius: 20px;
@@ -55,7 +55,7 @@ body {
     animation: fadeIn 1s ease;
 }
 
-.login-card::before {
+.registro-card::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -83,12 +83,12 @@ body {
     }
 }
 
-.login-header h2 {
+.registro-header h2 {
     font-size: 2em;
     margin-bottom: 10px;
 }
 
-.login-header p {
+.registro-header p {
     color: #aaa;
     margin-bottom: 20px;
 }
@@ -98,7 +98,8 @@ body {
     position: relative;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
     width: 100%;
     padding: 12px;
     border: none;
@@ -109,12 +110,13 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.input-group input:focus {
+.input-group input:focus,
+.input-group select:focus {
     background-color: #555;
     outline: none;
 }
 
-.login-button {
+.registro-button {
     background: var(--gradient-primary);
     color: white;
     padding: 12px;
@@ -128,21 +130,9 @@ body {
     box-shadow: 0 4px 15px rgba(255, 126, 185, 0.4);
 }
 
-.login-button:hover {
+.registro-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(255, 126, 185, 0.5);
-}
-
-.forgot-password {
-    display: inline-block;
-    margin-top: 15px;
-    color: var(--secondary-color);
-    text-decoration: none;
-    font-size: 0.9em;
-}
-
-.forgot-password:hover {
-    text-decoration: underline;
 }
 
 @keyframes fadeIn {

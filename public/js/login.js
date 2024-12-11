@@ -4,74 +4,37 @@ const supabaseUrl = 'https://wuclrdkmfhxwguvjflig.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Obtener el formulario y agregar el evento de envío
-const form = document.getElementById('registro-form');
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+// Referencia al formulario y al mensaje de error
+const loginForm = document.getElementById('login-form');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const errorMessage = document.getElementById('error-message');
 
-  // Obtener los valores del formulario
-  const nombre = document.getElementById('nombre').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const empresaId = document.getElementById('empresa').value;
+// Función para manejar el login
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevenir el envío del formulario por defecto
 
-  if (!empresaId) {
-    alert('Por favor, selecciona una empresa.');
-    return;
-  }
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
-  // Crear el usuario en Supabase Auth
-  const { user, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
+    try {
+        // Intenta autenticar al usuario con Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
 
-  if (error) {
-    alert('Error: ' + error.message);
-    return;
-  }
-
-  // Si la creación fue exitosa, insertamos los datos en la tabla 'usuarios' junto con el id de la empresa
-  const { data, errorInsert } = await supabase
-    .from('usuarios')
-    .insert([
-      {
-        id: user.id, // ID del usuario creado en Supabase Auth
-        nombre,
-        email,
-        empresa_id: empresaId, // Asociamos la empresa seleccionada
-        created_at: new Date(),
-      },
-    ]);
-
-  if (errorInsert) {
-    alert('Error al insertar datos: ' + errorInsert.message);
-  } else {
-    alert('¡Usuario creado con éxito!');
-    // Aquí puedes redirigir al usuario a otra página, como la página de login
-    window.location.href = 'login.html'; // Por ejemplo, redirigir al login
-  }
+        if (error) {
+            // Si hay un error (por ejemplo, credenciales incorrectas), muestra el mensaje de error
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = 'block';
+        } else {
+            // Si la autenticación es exitosa, redirige a otra página (por ejemplo, dashboard)
+            window.location.href = 'dashboard.html'; // Cambia la ruta según corresponda
+        }
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        errorMessage.textContent = 'Ocurrió un error al intentar iniciar sesión';
+        errorMessage.style.display = 'block';
+    }
 });
-
-// Cargar las empresas en el formulario
-async function cargarEmpresas() {
-  const { data: empresas, error } = await supabase
-    .from('empresas') // Supone que tienes una tabla 'empresas'
-    .select('id, nombre');
-
-  if (error) {
-    console.error('Error al cargar empresas:', error.message);
-    return;
-  }
-
-  const selectEmpresa = document.getElementById('empresa');
-  empresas.forEach((empresa) => {
-    const option = document.createElement('option');
-    option.value = empresa.id;
-    option.textContent = empresa.nombre;
-    selectEmpresa.appendChild(option);
-  });
-}
-
-// Llamar a la función para cargar las empresas cuando la página cargue
-cargarEmpresas();
