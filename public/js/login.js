@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://wuclrdkmfhxwguvjflig.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Referencia al formulario y al mensaje de error
@@ -28,9 +28,10 @@ loginForm.addEventListener('submit', async (e) => {
             // Si hay un error (por ejemplo, credenciales incorrectas), muestra el mensaje de error
             errorMessage.textContent = error.message;
             errorMessage.style.display = 'block';
+            console.error('Error de inicio de sesión:', error);
         } else {
             // Si la autenticación es exitosa, redirige a otra página (por ejemplo, dashboard)
-            window.location.href = 'dashboard.html'; // Cambia la ruta según corresponda
+            window.location.href = 'dashboard.html';
         }
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
