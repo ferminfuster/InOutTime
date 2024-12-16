@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Empresa - InOutTime</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <link rel="stylesheet" href="css/registro-empresa.css">
+</head>
+<body>
+    <div class="registro-container">
+        <form id="registro-empresa-form" class="registro-card">
+            <h2>Registro de Empresa</h2>
+            
+            <div class="input-group">
+                <label for="nombre-empresa">Nombre de la Empresa</label>
+                <input 
+                    type="text" 
+                    id="nombre-empresa" 
+                    name="nombre-empresa" 
+                    required 
+                    placeholder="Nombre completo de la empresa"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="direccion-empresa">Dirección</label>
+                <input 
+                    type="text" 
+                    id="direccion-empresa" 
+                    name="direccion-empresa" 
+                    required 
+                    placeholder="Dirección completa"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="email-empresa">Correo Electrónico de Empresa</label>
+                <input 
+                    type="email" 
+                    id="email-empresa" 
+                    name="email-empresa" 
+                    required 
+                    placeholder="correo@miempresa.com"
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="telefono-empresa">Teléfono</label>
+                <input 
+                    type="tel" 
+                    id="telefono-empresa" 
+                    name="telefono-empresa" 
+                    required 
+                    placeholder="Teléfono de contacto"
+                    pattern="[0-9]{9}"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="cif">CIF/NIF</label>
+                <input 
+                    type="text" 
+                    id="cif" 
+                    name="cif" 
+                    required 
+                    placeholder="Código de Identificación Fiscal"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="sector">Sector de Actividad</label>
+                <select id="sector" name="sector" required>
+                    <option value="">Selecciona un sector</option>
+                    <option value="tecnologia">Tecnología</option>
+                    <option value="servicios">Servicios</option>
+                    <option value="comercio">Comercio</option>
+                    <option value="industria">Industria</option>
+                    <option value="otros">Otros</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="num-empleados">Número de Empleados</label>
+                <input 
+                    type="number" 
+                    id="num-empleados" 
+                    name="num-empleados" 
+                    min="1" 
+                    required 
+                    placeholder="Número de empleados"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="fecha-fundacion">Fecha de Fundación</label>
+                <input 
+                    type="date" 
+                    id="fecha-fundacion" 
+                    name="fecha-fundacion" 
+                    required
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="observaciones">Observaciones (opcional)</label>
+                <textarea 
+                    id="observaciones" 
+                    name="observaciones" 
+                    placeholder="Información adicional"
+                    rows="3"
+                ></textarea>
+            </div>
+
+            <button type="submit" class="registro-button">Registrar Empresa</button>
+            
+            <div id="mensaje-registro-empresa" class="mensaje-registro"></div>
+            
+            <div class="login-link">
+                ¿Ya tienes registro? <a href="index.html">Iniciar Sesión</a>
+            </div>
+        </form>
+    </div>
+
+    <script type="module" src="js/registro-empresa.js"></script>
+</body>
+</html>
