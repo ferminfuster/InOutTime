@@ -1,153 +1,148 @@
 // Configuración de Supabase
-const supabaseUrl = 'https://wuclrdkmfhxwguvjflig.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
+const SUPABASE_URL = 'https://wuclrdkmfhxwguvjflig.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
 
-// Inicializar Supabase
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Configuración de Supabase
+//const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
+//const SUPABASE_ANON_KEY = 'tu-clave-publica';
 
-// Función de validación de email
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-}
+// Inicialización de Supabase
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Función de validación de contraseña
-function validatePassword(password) {
-    return password.length >= 6;
-}
+// Clase para manejar Login
+class LoginManager {
+    constructor() {
+        this.form = document.getElementById('login-form');
+        this.emailInput = document.getElementById('email');
+        this.passwordInput = document.getElementById('password');
+        this.errorContainer = document.getElementById('error-container');
+        this.forgotPasswordLink = document.getElementById('forgot-password');
 
-// Mapeo de mensajes de error
-const errorMessages = {
-    'Invalid login credentials': 'Correo o contraseña incorrectos',
-    'user_not_found': 'Usuario no encontrado',
-    'invalid_email': 'Formato de email inválido',
-};
+        this.initEventListeners();
+    }
 
-// Función para obtener mensaje de error amigable
-function getErrorMessage(error) {
-    return errorMessages[error.message] || error.message || 'Error al iniciar sesión';
-}
+    initEventListeners() {
+        // Listener de envío de formulario
+        this.form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await this.handleLogin();
+        });
 
-// Función de registro de intentos de login
-function logLoginAttempt(email, success) {
-    const logEntry = {
-        timestamp: new Date().toISOString(),
-        email: email,
-        success: success
-    };
+        // Listener de recuperación de contraseña
+        this.forgotPasswordLink.addEventListener('click', () => this.handlePasswordReset());
+    }
 
-    // Almacenar logs en localStorage
-    const logs = JSON.parse(localStorage.getItem('loginLogs') || '[]');
-    logs.push(logEntry);
-    localStorage.setItem('loginLogs', JSON.stringify(logs.slice(-10))); // Mantener solo los últimos 10 logs
+    // Método de validación de email
+    validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
 
-    console.table(logEntry);
-}
+    // Método de validación de contraseña
+    validatePassword(password) {
+        return password.length >= 6;
+    }
 
-// Evento de carga del DOM
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const errorMessageEl = document.getElementById('error-message');
-    const forgotPasswordLink = document.getElementById('forgot-password');
-
-    // Ocultar mensaje de error por defecto
-    errorMessageEl.style.display = 'none';
-
-    // Manejador de inicio de sesión
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Limpiar mensaje de error
-        errorMessageEl.textContent = '';
-        errorMessageEl.style.display = 'none';
-
-        // Obtener valores
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
+    // Método de login
+    async handleLogin() {
+        const email = this.emailInput.value.trim();
+        const password = this.passwordInput.value;
 
         // Validaciones
-        if (!validateEmail(email)) {
-            errorMessageEl.textContent = 'Por favor, introduce un email válido';
-            errorMessageEl.style.display = 'block';
-            logLoginAttempt(email, false);
+        if (!this.validateEmail(email)) {
+            this.showError('Por favor, introduce un email válido');
             return;
         }
 
-        if (!validatePassword(password)) {
-            errorMessageEl.textContent = 'La contraseña debe tener al menos 6 caracteres';
-            errorMessageEl.style.display = 'block';
-            logLoginAttempt(email, false);
+        if (!this.validatePassword(password)) {
+            this.showError('La contraseña debe tener al menos 6 caracteres');
             return;
         }
 
         try {
-            // Intento de inicio de sesión
+            // Intento de login
             const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password
             });
 
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
 
-            // Inicio de sesión exitoso
-            console.log('Usuario autenticado:', data.user);
-            logLoginAttempt(email, true);
-            
-            // Redirigir al dashboard o página principal
-            window.location.href = 'dashboard.html';
+            // Login exitoso
+            this.handleSuccessfulLogin(data.user);
+
         } catch (error) {
-            // Mostrar mensaje de error
-            console.error('Error de inicio de sesión:', error);
-            
-            errorMessageEl.textContent = getErrorMessage(error);
-            errorMessageEl.style.display = 'block';
-            logLoginAttempt(email, false);
+            this.handleLoginError(error);
         }
-    });
+    }
 
-    // Manejo de recuperación de contraseña
-    forgotPasswordLink.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const email = emailInput.value.trim();
+    // Método de recuperación de contraseña
+    async handlePasswordReset() {
+        const email = this.emailInput.value.trim();
 
-        if (!validateEmail(email)) {
-            errorMessageEl.textContent = 'Por favor, introduce un email válido para recuperar la contraseña';
-            errorMessageEl.style.display = 'block';
+        if (!this.validateEmail(email)) {
+            this.showError('Introduce un email válido para recuperar contraseña');
             return;
         }
 
         try {
-            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://tudominio.com/reset-password.html'
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/reset-password.html'
             });
 
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
 
-            alert('Se ha enviado un enlace de recuperación de contraseña a tu correo');
+            this.showSuccess('Revisa tu correo para recuperar la contraseña');
         } catch (error) {
-            console.error('Error al recuperar contraseña:', error);
-            errorMessageEl.textContent = getErrorMessage(error);
-            errorMessageEl.style.display = 'block';
+            this.handleLoginError(error);
         }
-    });
+    }
 
-    // Depuración: Verificar elementos
-    console.log('Elementos del formulario:', {
-        loginForm,
-        emailInput,
-        passwordInput,
-        errorMessageEl,
-        forgotPasswordLink
-    });
-});
+    // Manejo de login exitoso
+    handleSuccessfulLogin(user) {
+        console.log('Usuario autenticado:', user);
+        // Redirigir al dashboard o página principal
+        window.location.href = 'dashboard.html';
+    }
 
-// Manejo de errores global
-window.addEventListener('error', (event) => {
-    console.error('Error global:', event.error);
+    // Mostrar errores
+    showError(message) {
+        this.errorContainer.innerHTML = `
+            <div class="error-message">
+                <i class="error-icon">⚠️</i>
+                ${message}
+            </div>
+        `;
+        this.errorContainer.style.display = 'block';
+    }
+
+    // Mostrar mensaje de éxito
+    showSuccess(message) {
+        this.errorContainer.innerHTML = `
+            <div class="success-message">
+                <i class="success-icon">✅</i>
+                ${message}
+            </div>
+        `;
+        this.errorContainer.style.display = 'block';
+    }
+
+    // Manejo de errores de login
+    handleLoginError(error) {
+        console.error('Error de login:', error);
+        
+        const errorMap = {
+            'Invalid login credentials': 'Correo o contraseña incorrectos',
+            'user_not_found': 'Usuario no encontrado',
+            'invalid_email': 'Email inválido'
+        };
+
+        const errorMessage = errorMap[error.message] || error.message || 'Error de inicio de sesión';
+        this.showError(errorMessage);
+    }
+}
+
+// Inicializar Login Manager cuando el DOM esté cargado
+document.addEventListener('DOMContentLoaded', () => {
+    new LoginManager();
 });
