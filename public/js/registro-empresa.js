@@ -14,10 +14,6 @@ class RegistroEmpresaManager {
         this.emailEmpresaInput = document.getElementById('email-empresa');
         this.telefonoEmpresaInput = document.getElementById('telefono-empresa');
         this.cifInput = document.getElementById('cif');
-        this.sectorInput = document.getElementById('sector');
-        this.numEmpleadosInput = document.getElementById('num-empleados');
-        this.fechaFundacionInput = document.getElementById('fecha-fundacion');
-        this.observacionesInput = document.getElementById('observaciones');
         this.mensajeRegistro = document.getElementById('mensaje-registro-empresa');
 
         this.initEventListeners();
