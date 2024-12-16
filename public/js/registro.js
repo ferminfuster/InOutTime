@@ -1,78 +1,141 @@
-import { createClient } from '@supabase/supabase-js';
+// Configuración de Supabase
+const SUPABASE_URL = 'https://wuclrdkmfhxwguvjflig.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
 
-const supabaseUrl = 'https://wuclrdkmfhxwguvjflig.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Inicialización de Supabase
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Obtener el formulario y agregar el evento de envío
-const form = document.getElementById('registro-form');
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+class RegistroManager {
+    constructor() {
+        this.form = document.getElementById('registro-form');
+        this.nombreInput = document.getElementById('nombre');
+        this.apellidosInput = document.getElementById('apellidos');
+        this.empresaInput = document.getElementById('empresa');
+        this.emailInput = document.getElementById('email');
+        this.passwordInput = document.getElementById('password');
+        this.confirmPasswordInput = document.getElementById('confirm-password');
+        this.mensajeRegistro = document.getElementById('mensaje-registro');
 
-  // Obtener los valores del formulario
-  const nombre = document.getElementById('nombre').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const empresaId = document.getElementById('empresa').value;
+        this.initEventListeners();
+    }
 
-  if (!empresaId) {
-    alert('Por favor, selecciona una empresa.');
-    return;
-  }
+    initEventListeners() {
+        this.form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await this.handleRegistro();
+        });
+    }
 
-  // Crear el usuario en Supabase Auth
-  const { user, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
+    // Validaciones
+    validateForm() {
+        const email = this.emailInput.value.trim();
+        const password = this.passwordInput.value;
+        const confirmPassword = this.confirmPasswordInput.value;
+        const nombre = this.nombreInput.value.trim();
+        const apellidos = this.apellidosInput.value.trim();
+        const empresa = this.empresaInput.value.trim();
 
-  if (error) {
-    alert('Error: ' + error.message);
-    return;
-  }
+        // Validaciones
+        if (!this.validateEmail(email)) {
+            this.showMensaje('Por favor, introduce un email válido', 'error');
+            return false;
+        }
 
-  // Si la creación fue exitosa, insertamos los datos en la tabla 'usuarios' junto con el id de la empresa
-  const { data, errorInsert } = await supabase
-    .from('usuarios')
-    .insert([
-      {
-        id: user.id, // ID del usuario creado en Supabase Auth
-        nombre,
-        email,
-        empresa_id: empresaId, // Asociamos la empresa seleccionada
-        created_at: new Date(),
-      },
-    ]);
+        if (password.length < 6) {
+            this.showMensaje('La contraseña debe tener al menos 6 caracteres', 'error');
+            return false;
+        }
 
-  if (errorInsert) {
-    alert('Error al insertar datos: ' + errorInsert.message);
-  } else {
-    alert('¡Usuario creado con éxito!');
-    // Aquí puedes redirigir al usuario a otra página, como la página de login
-    window.location.href = 'login.html'; // Por ejemplo, redirigir al login
-  }
-});
+        if (password !== confirmPassword) {
+            this.showMensaje('Las contraseñas no coinciden', 'error');
+            return false;
+        }
 
-// Cargar las empresas en el formulario
-async function cargarEmpresas() {
-  const { data: empresas, error } = await supabase
-    .from('empresas') // Supone que tienes una tabla 'empresas'
-    .select('id, nombre');
+        if (!nombre || !apellidos || !empresa) {
+            this.showMensaje('Todos los campos son obligatorios', 'error');
+            return false;
+        }
 
-  if (error) {
-    console.error('Error al cargar empresas:', error.message);
-    return;
-  }
+        return true;
+    }
 
-  const selectEmpresa = document.getElementById('empresa');
-  empresas.forEach((empresa) => {
-    const option = document.createElement('option');
-    option.value = empresa.id;
-    option.textContent = empresa.nombre;
-    selectEmpresa.appendChild(option);
-  });
+    // Validación de email
+    validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    // Método de registro
+    async handleRegistro() {
+        // Validar formulario
+        if (!this.validateForm()) return;
+
+        const email = this.emailInput.value.trim();
+        const password = this.passwordInput.value;
+        const nombre = this.nombreInput.value.trim();
+        const apellidos = this.apellidosInput.value.trim();
+        const empresa = this.empresaInput.value.trim();
+
+        try {
+            // 1. Registro en Supabase Auth
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    // Datos adicionales del perfil
+                    data: {
+                        nombre,
+                        apellidos,
+                        empresa
+                    }
+                }
+            });
+
+            if (authError) {
+                throw authError;
+            }
+
+            // Verificar estado del registro
+            if (authData.user) {
+                this.showMensaje('Registro completado. Por favor, verifica tu correo.', 'success');
+                
+                // Limpiar formulario
+                this.form.reset();
+
+                // Redirigir después de un tiempo
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            }
+
+        } catch (error) {
+            console.error('Error de registro:', error);
+            
+            // Mapeo de errores comunes
+            const errorMap = {
+                'user_already_exists': 'El usuario ya existe',
+                'invalid_email': 'Email inválido',
+                'weak_password': 'Contraseña demasiado débil'
+            };
+
+            const errorMessage = errorMap[error.message] || error.message || 'Error en el registro';
+            this.showMensaje(errorMessage, 'error');
+        }
+    }
+
+    // Mostrar mensajes
+    showMensaje(mensaje, tipo = 'error') {
+        this.mensajeRegistro.innerHTML = `
+            <div class="${tipo}-mensaje">
+                ${mensaje}
+            </div>
+        `;
+        this.mensajeRegistro.style.display = 'block';
+    }
 }
 
-
-// Llamar a la función para cargar las empresas cuando la página cargue
-cargarEmpresas();
+// Inicial ```javascript
+// Inicializar cuando el DOM esté cargado
+document.addEventListener('DOMContentLoaded', () => {
+    new RegistroManager();
+});
