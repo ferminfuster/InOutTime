@@ -1,4 +1,3 @@
-// js/login.js
 // Configuración de Supabase
 const supabaseUrl = 'https://wuclrdkmfhxwguvjflig.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
@@ -29,12 +28,29 @@ function getErrorMessage(error) {
     return errorMessages[error.message] || error.message || 'Error al iniciar sesión';
 }
 
+// Función de registro de intentos de login
+function logLoginAttempt(email, success) {
+    const logEntry = {
+        timestamp: new Date().toISOString(),
+        email: email,
+        success: success
+    };
+
+    // Almacenar logs en localStorage
+    const logs = JSON.parse(localStorage.getItem('loginLogs') || '[]');
+    logs.push(logEntry);
+    localStorage.setItem('loginLogs', JSON.stringify(logs.slice(-10))); // Mantener solo los últimos 10 logs
+
+    console.table(logEntry);
+}
+
 // Evento de carga del DOM
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const errorMessageEl = document.getElementById('error-message');
+    const forgotPasswordLink = document.getElementById('forgot-password');
 
     // Ocultar mensaje de error por defecto
     errorMessageEl.style.display = 'none';
@@ -55,12 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!validateEmail(email)) {
             errorMessageEl.textContent = 'Por favor, introduce un email válido';
             errorMessageEl.style.display = 'block';
+            logLoginAttempt(email, false);
             return;
         }
 
         if (!validatePassword(password)) {
             errorMessageEl.textContent = 'La contraseña debe tener al menos 6 caracteres';
             errorMessageEl.style.display = 'block';
+            logLoginAttempt(email, false);
             return;
         }
 
@@ -77,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Inicio de sesión exitoso
             console.log('Usuario autenticado:', data.user);
+            logLoginAttempt(email, true);
             
             // Redirigir al dashboard o página principal
             window.location.href = 'dashboard.html';
@@ -86,11 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             errorMessageEl.textContent = getErrorMessage(error);
             errorMessageEl.style.display = 'block';
+            logLoginAttempt(email, false);
         }
     });
 
-    // Opcional: Manejo de recuperación de contraseña
-    const forgotPasswordLink = document.querySelector('.forgot-password');
+    // Manejo de recuperación de contraseña
     forgotPasswordLink.addEventListener('click', async (e) => {
         e.preventDefault();
         const email = emailInput.value.trim();
@@ -117,4 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
             errorMessageEl.style.display = 'block';
         }
     });
+
+    // Depuración: Verificar elementos
+    console.log('Elementos del formulario:', {
+        loginForm,
+        emailInput,
+        passwordInput,
+        errorMessageEl,
+        forgotPasswordLink
+    });
+});
+
+// Manejo de errores global
+window.addEventListener('error', (event) => {
+    console.error('Error global:', event.error);
 });
