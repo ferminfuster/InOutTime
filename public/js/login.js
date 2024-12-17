@@ -142,6 +142,8 @@ class LoginManager {
     }
 }
 
+
+
 // Inicializar Login Manager cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
     new LoginManager();
