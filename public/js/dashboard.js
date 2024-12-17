@@ -1,7 +1,18 @@
-// Configura tu SupaBase con la URL y API Key de tu proyecto
-const supabaseUrl = 'https://tu-url.supabase.co'; // Reemplaza con tu URL de SupaBase
-const supabaseKey = 'tu-clave-api';               // Reemplaza con tu API Key
+// Configuración de Supabase
+const SUPABASE_URL = 'https://wuclrdkmfhxwguvjflig.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
+
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Mostrar el nombre del usuario
+document.addEventListener('DOMContentLoaded', async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+        document.getElementById('userName').textContent = user.email;
+    } else {
+        window.location.href = 'login.html';
+    }
+});
 
 // Evento de cerrar sesión
 document.getElementById('logoutButton').addEventListener('click', async () => {

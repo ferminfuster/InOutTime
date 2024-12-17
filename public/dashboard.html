@@ -5,31 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/dashboard.js" defer></script>
 </head>
 <body>
-    <header>
-        <img src="images/logo.png" alt="Logo de la Empresa">
-        <h1>Bienvenido al Dashboard</h1>
-        <button id="logoutButton">Cerrar Sesión</button>
-    </header>
-
-    <main>
-        <div class="button-container">
-            <button class="action-button" id="entradaButton">Entrada</button>
-            <button class="action-button" id="salidaButton">Salida</button>
-            <button class="action-button" id="incidenciaButton">Incidencia</button>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Bienvenido, <span id="user-name">Usuario</span></h1>
+            <button class="logout-button">Cerrar Sesión</button>
         </div>
-
-        <div class="options-container">
-            <button id="changePasswordButton">Cambiar Password</button>
-            <button id="downloadReportButton">Descargar Informe</button>
+        
+        <div class="dashboard-buttons">
+            <button class="action-button entrada">Entrada</button>
+            <button class="action-button salida">Salida</button>
+            <button class="action-button incidencia">Incidencia</button>
         </div>
-    </main>
+        
+        <div class="dashboard-actions">
+            <button class="secondary-button change-password">Cambiar Password</button>
+            <button class="secondary-button download-reports">Descargar Informes</button>
+        </div>
+    </div>
 
-    <footer>
-        <p>&copy; 2024 - Tu Empresa</p>
-    </footer>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
