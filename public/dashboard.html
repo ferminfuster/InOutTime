@@ -3,28 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Portal de Usuario - Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
     <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1>Bienvenido, <span id="user-name">Usuario</span></h1>
-            <button class="logout-button">Cerrar Sesión</button>
-        </div>
-        
-        <div class="dashboard-buttons">
-            <button class="action-button entrada">Entrada</button>
-            <button class="action-button salida">Salida</button>
-            <button class="action-button incidencia">Incidencia</button>
-        </div>
-        
-        <div class="dashboard-actions">
-            <button class="secondary-button change-password">Cambiar Password</button>
-            <button class="secondary-button download-reports">Descargar Informes</button>
-        </div>
-    </div>
+        <!-- Barra superior con información del usuario -->
+        <header class="dashboard-header">
+            <div class="user-info">
+                <h2>¡Bienvenido, Juan Pérez!</h2>
+                <p>Empresa: <strong>XYZ Corp</strong></p>
+            </div>
+            <button class="btn logout">Cerrar Sesión</button>
+        </header>
 
-    <script src="js/dashboard.js"></script>
+        <!-- Sección principal con botones de acción -->
+        <main class="main-actions">
+            <div class="action-card entry">
+                <h3>Entrada</h3>
+                <button class="btn action-btn">Fichar Entrada</button>
+            </div>
+            <div class="action-card exit">
+                <h3>Salida</h3>
+                <button class="btn action-btn">Fichar Salida</button>
+            </div>
+            <div class="action-card incident">
+                <h3>Incidencia</h3>
+                <button class="btn action-btn">Registrar Incidencia</button>
+            </div>
+        </main>
+
+        <!-- Opciones secundarias -->
+        <section class="secondary-actions">
+            <button class="btn secondary">Generar Reporte</button>
+            <button class="btn secondary">Cambiar Contraseña</button>
+        </section>
+    </div>
 </body>
 </html>

@@ -1,118 +1,144 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+/* Importar colores globales */
+@import url('styles.css');
 
-:root {
-    --primary-color: #ff7eb9;
-    --secondary-color: #7afcff;
-    --background-color: #1e1e2e;
-    --text-color: #fff;
-    --card-background: #2c2c3f;
-    --gradient-primary: linear-gradient(135deg, #ff7eb9 0%, #7afcff 100%);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    animation: backgroundAnimation 10s infinite alternate;
-}
-
-@keyframes backgroundAnimation {
-    from {
-        background-color: #1e1e2e;
-    }
-    to {
-        background-color: #2a2a4d;
-    }
-}
-
+/* Contenedor principal del dashboard */
 .dashboard-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
     background: var(--card-background);
-    padding: 30px;
-    border-radius: 20px;
+    border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 500px;
     text-align: center;
+    animation: fadeIn 1s ease;
 }
 
+/* Barra superior con información del usuario */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: var(--gradient-primary);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    color: #fff;
 }
 
-.dashboard-header h1 {
+.dashboard-header h2 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 1em;
+}
+
+.btn.logout {
+    background-color: var(--error-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn.logout:hover {
+    background-color: #dc2626;
+}
+
+/* Sección principal de acciones */
+.main-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.action-card {
+    background: var(--background-color);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    transition: transform 0.3s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-10px);
+}
+
+.action-card h3 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
     font-size: 1.5em;
 }
 
-.logout-button {
-    background: var(--secondary-color);
-    color: var(--background-color);
-    padding: 8px 16px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.logout-button:hover {
-    background-color: #63e6ff;
-}
-
-.dashboard-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.action-button {
-    background: var(--gradient-primary);
-    color: var(--text-color);
+.btn.action-btn {
     padding: 15px 20px;
-    border: none;
-    border-radius: 12px;
+    font-size: 1.2em;
     font-weight: bold;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 126, 185, 0.4);
-    width: 30%;
-}
-
-.action-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(255, 126, 185, 0.5);
-}
-
-.dashboard-actions {
-    display: flex;
-    justify-content: space-around;
-}
-
-.secondary-button {
-    background: #444;
-    color: var(--text-color);
-    padding: 12px 20px;
+    color: #fff;
     border: none;
     border-radius: 8px;
-    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 45%;
+    transition: background 0.3s ease;
+    width: 100%;
 }
 
-.secondary-button:hover {
-    background-color: #555;
+/* Colores para botones de acción */
+.entry .btn.action-btn {
+    background-color: var(--success-color);
+}
+
+.exit .btn.action-btn {
+    background-color: var(--error-color);
+}
+
+.incident .btn.action-btn {
+    background-color: #eab308; /* Amarillo */
+}
+
+.btn.action-btn:hover {
+    opacity: 0.9;
+}
+
+/* Opciones secundarias */
+.secondary-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn.secondary {
+    background-color: var(--secondary-color);
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn.secondary:hover {
+    background-color: #0f766e;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .main-actions {
+        flex-direction: column;
+    }
+
+    .secondary-actions {
+        flex-direction: column;
+    }
 }
