@@ -3,42 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Usuario - Dashboard</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>InOutTime - Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Iconos -->
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Barra superior con información del usuario -->
-        <header class="dashboard-header">
+    <div class="container">
+        <!-- Cabecera de usuario -->
+        <div class="user-header">
+            <div class="user-avatar">
+                <span>FFF</span> <!-- Iniciales del usuario -->
+            </div>
             <div class="user-info">
-                <h2>¡Bienvenido, Juan Pérez!</h2>
-                <p>Empresa: <strong>XYZ Corp</strong></p>
+                <h2>Fermin</h2>
+                <p>test@gmail.com</p>
+                <p>Empresa</p>
             </div>
-            <button class="btn logout">Cerrar Sesión</button>
-        </header>
+        </div>
 
-        <!-- Sección principal con botones de acción -->
-        <main class="main-actions">
-            <div class="action-card entry">
-                <h3>Entrada</h3>
-                <button class="btn action-btn">Fichar Entrada</button>
-            </div>
-            <div class="action-card exit">
-                <h3>Salida</h3>
-                <button class="btn action-btn">Fichar Salida</button>
-            </div>
-            <div class="action-card incident">
-                <h3>Incidencia</h3>
-                <button class="btn action-btn">Registrar Incidencia</button>
-            </div>
-        </main>
+        <!-- Opciones de fichaje -->
+        <div class="panel-title">
+            <h3>Panel de Usuario</h3>
+        </div>
+        <div class="fichaje-buttons">
+            <button id="btnEntrada" class="button entry-button" onclick="registrarEntrada()">
+                <i class="fas fa-sign-in-alt"></i> Registrar Entrada
+            </button>
+            <button id="btnSalida" class="button exit-button" onclick="registrarSalida()">
+                <i class="fas fa-sign-out-alt"></i> Registrar Salida
+            </button>
+            <button id="btnIncidencia" class="button incidence-button" onclick="registrarIncidencia()">
+                <i class="fas fa-exclamation-triangle"></i> Registrar Incidencia
+            </button>
+        </div>
 
-        <!-- Opciones secundarias -->
-        <section class="secondary-actions">
-            <button class="btn secondary">Generar Reporte</button>
-            <button class="btn secondary">Cambiar Contraseña</button>
-        </section>
+        <!-- Opciones de usuario -->
+        <div class="secondary-actions">
+            <button class="button main-button" onclick="cambiarPassword()">
+                <i class="fas fa-key"></i> Cambiar Contraseña
+            </button>
+            <button class="button main-button" onclick="generarInforme()">
+                <i class="fas fa-file-alt"></i> Mis Informes
+            </button>
+            <button class="button main-button" onclick="LogOut()">
+                <i class="fas fa-power-off"></i> Cerrar Sesión
+            </button>
+        </div>
     </div>
+
+    <!-- Scripts de dashboard -->
+    <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
