@@ -81,10 +81,6 @@ class RegistroEmpresaManager {
         const emailEmpresa = this.emailEmpresaInput.value.trim();
         const telefonoEmpresa = this.telefonoEmpresaInput.value.trim();
         const cif = this.cifInput.value.trim();
-        const sector = this.sectorInput.value;
-        const numEmpleados = this.numEmpleadosInput.value;
-        const fechaFundacion = this.fechaFundacionInput.value;
-        const observaciones = this.observacionesInput.value;
 
         try {
             // 1. Registro en la tabla empresas
@@ -96,11 +92,8 @@ class RegistroEmpresaManager {
                         direccion_empresa: direccionEmpresa,
                         email_empresa: emailEmpresa,
                         telefono_empresa: telefonoEmpresa,
-                        cif: cif,
-                        sector: sector,
-                        num_empleados: numEmpleados,
-                        fecha_fundacion: fechaFundacion,
-                        observaciones: observaciones
+                        cif: cif
+  
                     }
                 ]);
 
