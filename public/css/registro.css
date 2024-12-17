@@ -6,6 +6,7 @@
     --card-background: #334155;
     --error-color: #ef4444;
     --success-color: #22c55e;
+    --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
 }
 
 * {
@@ -93,15 +94,16 @@ input:focus {
 }
 
 button.registro-button {
-    width: 100%;
-    background: var(--primary-color);
-    color: white;
+    background: var(--gradient-primary);
+    color: #fff;
     padding: 12px;
-    font-size: 1.1em;
+    font-size: 1.2em;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button.registro-button:hover {
