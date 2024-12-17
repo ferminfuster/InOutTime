@@ -1,13 +1,3 @@
-// Configuración de Supabase
-//const SUPABASE_URL = 'https://wuclrdkmfhxwguvjflig.supabase.co';
-//const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1Y2xyZGttZmh4d2d1dmpmbGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MjMxOTMsImV4cCI6MjA0OTQ5OTE5M30.iMtQIzRNkbMMvrGJuz-tMP4PBqmJ9BsEoaZv10xb_hA';
-// Configuración de Supabase
-
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-// Inicialización de Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 class RegistroManager {
     constructor() {
         this.form = document.getElementById('registro-form');
@@ -80,28 +70,25 @@ class RegistroManager {
         const empresa = this.empresaInput.value.trim();
 
         try {
-            // 1. Registro en Supabase Auth
-            const { data: authData, error: authError } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    // Datos adicionales del perfil
-                    data: {
-                        nombre,
-                        apellidos,
-                        empresa
-                    }
-                }
+            // 1. Hacer solicitud a la función de Netlify para registrar al usuario
+            const response = await fetch('/.netlify/functions/getconect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    nombre,
+                    apellidos,
+                    empresa,
+                }),
             });
 
-            if (authError) {
-                throw authError;
-            }
+            const result = await response.json();
 
-            // Verificar estado del registro
-            if (authData.user) {
-                this.showMensaje('Registro completado. Por favor, verifica tu correo.', 'success');
-                
+            if (response.ok) {
+                this.showMensaje(result.message, 'success');
                 // Limpiar formulario
                 this.form.reset();
 
@@ -109,20 +96,12 @@ class RegistroManager {
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 3000);
+            } else {
+                this.showMensaje(result.error, 'error');
             }
-
         } catch (error) {
             console.error('Error de registro:', error);
-            
-            // Mapeo de errores comunes
-            const errorMap = {
-                'user_already_exists': 'El usuario ya existe',
-                'invalid_email': 'Email inválido',
-                'weak_password': 'Contraseña demasiado débil'
-            };
-
-            const errorMessage = errorMap[error.message] || error.message || 'Error en el registro';
-            this.showMensaje(errorMessage, 'error');
+            this.showMensaje('Hubo un error al procesar tu solicitud', 'error');
         }
     }
 
@@ -137,7 +116,6 @@ class RegistroManager {
     }
 }
 
-// Inicial ```javascript
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
     new RegistroManager();
